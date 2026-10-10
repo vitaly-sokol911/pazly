@@ -10,17 +10,21 @@
   'use strict';
   const ALLOWED_FRAME_PARENTS = [];
 
-  if (window.top === window.self) return; // обычное открытие, всё в порядке
+  const reveal = () => { document.documentElement.style.visibility = 'visible'; };
+
+  if (window.top === window.self) { reveal(); return; } // обычное открытие
 
   let parentOrigin = '';
   try { parentOrigin = document.referrer ? new URL(document.referrer).origin : ''; } catch (e) {}
-  if (parentOrigin && ALLOWED_FRAME_PARENTS.indexOf(parentOrigin) !== -1) return;
+  if (parentOrigin && ALLOWED_FRAME_PARENTS.indexOf(parentOrigin) !== -1) { reveal(); return; }
 
-  // Пробуем выйти из рамки. В песочнице браузер это запретит — тогда
-  // показываем честное объяснение со ссылкой на настоящий адрес.
-  try { window.top.location.replace(window.location.href); return; } catch (e) {}
+  // Пробуем выйти из рамки. С чужого сайта браузер это запретит — тогда
+  // показываем заглушку, чтобы нажимать было не на что.
+  // Переход может быть заблокирован и БЕЗ ошибки, поэтому заглушку готовим
+  // в любом случае: выйдем из рамки — она просто не успеет показаться.
+  try { window.top.location.replace(window.location.href); } catch (e) {}
 
-  document.addEventListener('DOMContentLoaded', () => {
+  const showBlock = () => {
     document.body.textContent = '';
     const box = document.createElement('div');
     box.style.cssText = 'font:600 16px/1.6 system-ui,sans-serif;color:#1b2130;' +
@@ -36,7 +40,17 @@
     box.appendChild(h);
     box.appendChild(a);
     document.body.appendChild(box);
-  });
+    document.documentElement.style.visibility = 'visible';
+  };
+
+  // Если разметка уже готова — показываем сразу, иначе дожидаемся её.
+  // Раньше здесь был только обработчик события: сработай он позже загрузки —
+  // заглушка бы не появилась, и игра осталась бы доступной внутри рамки.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', showBlock);
+  } else {
+    showBlock();
+  }
 })();
 
 // ==== Главный контроллер приложения ====

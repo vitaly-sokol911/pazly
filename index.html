@@ -27,6 +27,11 @@
 <link rel="icon" href="icon-256.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="stylesheet" href="styles.css">
+
+<!-- Прячем страницу до проверки на встраивание в чужую рамку: иначе игра
+     на долю секунды видна внутри неё, и за это время по ней можно кликнуть.
+     Видимость возвращает app.js, когда убедится, что окно своё. -->
+<style>html{visibility:hidden}</style>
 </head>
 <body>
 
