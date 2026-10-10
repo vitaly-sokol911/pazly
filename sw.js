@@ -1,4 +1,4 @@
-const CACHE = 'puzzle-cache-v9';
+const CACHE = 'puzzle-cache-v10';
 const CORE = [
   './',
   './index.html',
@@ -10,6 +10,8 @@ const CORE = [
   './manifest.json',
   './icon-256.png',
   './icon-180.png',
+  './icon-512.png',
+  './icon-maskable-512.png',
   './og.jpg'
 ];
 

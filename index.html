@@ -27,6 +27,13 @@
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-256.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
+
+<!-- Айфоны старше iOS 16.4 манифест не читают: без этих строк значок
+     с рабочего стола открывает игру в Safari с адресной строкой,
+     а не как отдельное приложение. -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Пазлы">
 <link rel="stylesheet" href="styles.css">
 
 <!-- Прячем страницу до проверки на встраивание в чужую рамку: иначе игра
