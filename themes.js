@@ -186,7 +186,7 @@ const CREDITS = {
     { title: 'Pumpkins at Whole Foods, Sonoma, California', author: 'Sarah Stierch', license: 'CC BY 4.0' }
   ],
   transport: [
-    { title: 'Vintage car at Hampden House', author: 'Graham Horn', license: 'CC BY-SA 2.0' },
+    { title: 'Chevy Bel Air in the Presidio of San Francisco', author: 'Frank Schulenburg', license: 'CC BY-SA 4.0' },
     { title: 'LV-0233 steam locomotive at Taganrog-II station', author: 'Alexxx1979', license: 'CC BY-SA 4.0' },
     { title: 'Sailing vessel Rembrandt van Rijn', author: 'Vaido Otsar', license: 'CC BY-SA 4.0' },
     { title: 'Hot air balloon', author: 'Alexey V. Kurochkin', license: 'CC BY-SA 4.0' },
