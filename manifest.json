@@ -1,0 +1,16 @@
+{
+  "name": "Пазлы — увлекательная игра",
+  "short_name": "Пазлы",
+  "description": "Собирай фигурные пазлы на любые темы: животные, цветы, города, море и многое другое.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f4f2fb",
+  "theme_color": "#6c5ce7",
+  "icons": [
+    { "src": "icon-256.png", "sizes": "256x256", "type": "image/png", "purpose": "any" },
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png", "purpose": "any" },
+    { "src": "icon-256.png", "sizes": "256x256", "type": "image/png", "purpose": "maskable" }
+  ]
+}

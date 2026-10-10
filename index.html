@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+
+<title>Пазлы — собери картинку из фигурных деталей</title>
+<meta name="description" content="Браузерная игра в пазлы: 13 тем, 65 фотографий, уровни от 9 до 64 деталей. Работает без интернета, ничего не нужно устанавливать.">
+
+<!-- Превью при отправке ссылки в мессенджер или соцсеть -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Пазлы — собери картинку из фигурных деталей">
+<meta property="og:description" content="13 тем, 65 фотографий, уровни от 9 до 64 деталей. Работает без интернета, устанавливать ничего не нужно.">
+<meta property="og:image" content="og.jpg">
+<meta property="og:locale" content="ru_RU">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Страница ничего не грузит со стороны: всё своё.
+     frame-ancestors тут не указываем — в мета-теге он игнорируется,
+     его задаёт заголовок на стороне хостинга. -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'none'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self'; font-src 'self' data:; manifest-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+
+<meta name="theme-color" content="#eef1f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1017" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-256.png" type="image/png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ЭКРАН: ВЫБОР ТЕМЫ -->
+  <section id="screen-themes" class="screen active">
+    <header class="topbar">
+      <div class="head-left">
+        <h1 class="logo">Пазлы<span class="accent">.</span></h1>
+        <p class="tagline">Выберите тему и соберите картинку из фигурных деталей</p>
+      </div>
+      <div class="stats" id="global-stats"></div>
+      <button class="btn-icon" id="btn-rules" aria-label="Как играть" title="Как играть">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.2 2.4c-.7.2-1.2.9-1.2 1.6v.4"/><path d="M12 17h.01"/></svg>
+      </button>
+    </header>
+    <div class="theme-grid" id="theme-grid"></div>
+    <button id="btn-credits" class="btn-link credits-link">Об изображениях и авторах</button>
+  </section>
+
+  <!-- ЭКРАН: ВЫБОР УРОВНЯ -->
+  <section id="screen-levels" class="screen">
+    <header class="topbar">
+      <button class="btn-icon" id="btn-back-to-themes" aria-label="Назад к темам">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="head-left">
+        <h2 class="screen-title" id="levels-theme-title">Тема</h2>
+        <p class="tagline" id="levels-theme-sub"></p>
+      </div>
+    </header>
+    <div class="level-grid" id="level-grid"></div>
+  </section>
+
+  <!-- ЭКРАН: ИГРА -->
+  <section id="screen-game" class="screen">
+    <header class="topbar">
+      <button class="btn-icon" id="btn-back-to-levels" aria-label="Назад к уровням">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <div class="game-info">
+        <div class="game-title" id="game-title">Тема · Уровень</div>
+        <div class="game-sub">
+          <span id="game-progress">0 / 0</span>
+          <span id="game-timer">00:00</span>
+        </div>
+      </div>
+      <button class="btn-icon" id="btn-preview" aria-label="Показать картинку целиком" title="Показать картинку целиком">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+    </header>
+    <div class="game-toolbar">
+      <button id="btn-hint" class="btn-small">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.5.4.8 1 .9 1.6h5.4c.1-.6.4-1.2.9-1.6A6 6 0 0 0 12 3z"/></svg>
+        Подсказка
+      </button>
+      <button id="btn-shuffle" class="btn-small">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+        Перемешать
+      </button>
+    </div>
+    <div class="board-wrap">
+      <div id="board" class="board"></div>
+    </div>
+  </section>
+
+  <!-- ЭКРАН: ПОБЕДА -->
+  <section id="screen-win" class="screen">
+    <div class="win-card">
+      <h2>Картинка собрана</h2>
+      <p class="win-stats" id="win-stats"></p>
+      <div class="win-stars" id="win-stars"></div>
+      <p class="win-stats" id="win-next-hint"></p>
+      <div class="win-buttons">
+        <button id="btn-win-replay" class="btn-secondary">Ещё раз</button>
+        <button id="btn-win-next" class="btn-primary">Следующий уровень</button>
+      </div>
+      <button id="btn-win-menu" class="btn-link">К списку уровней</button>
+      <div class="author-note" id="author-note" hidden></div>
+    </div>
+  </section>
+
+  <!-- картинка целиком -->
+  <div id="preview-overlay" class="overlay">
+    <div class="preview-box"><img id="preview-img" alt="Картинка этого уровня целиком"></div>
+  </div>
+
+  <!-- как играть -->
+  <div id="rules-overlay" class="overlay">
+    <div class="sheet">
+      <h2>Как играть</h2>
+      <p>Правила простые, но пара мелочей экономит время.</p>
+      <div class="rules-step"><span class="n">1</span><div>Перетащите деталь на её место. Когда она близко, деталь <b>сама встаёт в паз</b> со щелчком.</div></div>
+      <div class="rules-step"><span class="n">2</span><div>Забыли, что собираете — нажмите <b>глаз</b> в правом верхнем углу, покажется картинка целиком.</div></div>
+      <div class="rules-step"><span class="n">3</span><div><b>Подсказка</b> подсветит одну деталь и место, куда она идёт. <b>Перемешать</b> заново разложит те детали, что ещё не на месте.</div></div>
+      <div class="rules-step"><span class="n">4</span><div>Три звезды даются за скорость. Чем быстрее собрали — тем больше звёзд.</div></div>
+      <button class="btn-secondary" id="btn-rules-close">Понятно</button>
+    </div>
+  </div>
+
+  <!-- авторы изображений -->
+  <div id="credits-overlay" class="overlay">
+    <div class="sheet">
+      <h2>Об изображениях</h2>
+      <p>Фотографии взяты с Wikimedia Commons и распространяются по свободным лицензиям: Public Domain, CC0, CC BY, CC BY-SA. Тема «Мультяшные герои» — оригинальные рисунки, созданные для этой игры.</p>
+      <div id="credits-list"></div>
+      <button class="btn-secondary" id="btn-credits-close">Закрыть</button>
+    </div>
+  </div>
+
+</div>
+
+<script src="themes.js"></script>
+<script src="storage.js"></script>
+<script src="puzzle.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
