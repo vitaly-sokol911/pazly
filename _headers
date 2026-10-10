@@ -1,0 +1,13 @@
+# Защитные заголовки — тот же набор, что в проекте «Нумеролог».
+#
+# ВАЖНО: GitHub Pages этот файл ИГНОРИРУЕТ, там свои заголовки задать нельзя.
+# Он сработает на Netlify и Cloudflare Pages. Пока игра живёт на GitHub Pages,
+# защиту от встраивания в рамку делает код в app.js.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Content-Security-Policy: frame-ancestors 'none'
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), camera=(), microphone=(), payment=(), usb=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Cross-Origin-Opener-Policy: same-origin
