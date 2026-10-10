@@ -1,4 +1,4 @@
-const CACHE = 'puzzle-cache-v6';
+const CACHE = 'puzzle-cache-v7';
 const CORE = [
   './',
   './index.html',

@@ -467,9 +467,13 @@
   if ('serviceWorker' in navigator && !isSingleFile) {
     // Когда приходит обновлённая версия игры — перезагружаем страницу один раз,
     // иначе браузер мог бы бесконечно показывать старую версию из кэша.
+    // Перезагружаем только когда новая версия СМЕНЯЕТ работающую. При первом
+    // визите управление захватывается впервые — тогда перезагрузка лишняя,
+    // человек увидел бы непонятный скачок страницы сразу после открытия.
+    const hadController = !!navigator.serviceWorker.controller;
     let reloading = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (reloading) return;
+      if (!hadController || reloading) return;
       reloading = true;
       location.reload();
     });
